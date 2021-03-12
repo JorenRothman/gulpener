@@ -5,6 +5,7 @@ import TaskBuilder from './TaskBuilder';
 
 export interface GulpenerOptions {
     name: string;
+    watchName: string;
     inGlobs: string[];
     watchGlobs: string[];
     outFolder: string;
@@ -14,9 +15,10 @@ export interface GulpenerOptions {
 
 export default function gulpener(
     options: GulpenerOptions
-): [TaskFunction, TaskFunction] {
+): [TaskFunction, TaskFunction?] {
     const {
         name,
+        watchName = '',
         inGlobs,
         outFolder,
         watchGlobs,
@@ -24,7 +26,7 @@ export default function gulpener(
         isProduction = true,
     } = options;
 
-    task(`build:${name}`, () => {
+    task(`${name}`, () => {
         const taskBuilder = new TaskBuilder(src(inGlobs));
 
         pipes.forEach((pipe) => {
@@ -36,11 +38,15 @@ export default function gulpener(
         return taskBuilder.stream;
     });
 
-    const buildTask = task(`build:${name}`);
+    const normalTask = task(`build:${name}`);
 
-    task(`watch:${name}`, () => watch(watchGlobs, buildTask));
+    if (watchName) {
+        task(`${watchName}`, () => watch(watchGlobs, normalTask));
 
-    const watchTask = task(`watch:${name}`);
+        const watchTask = task(`watch:${name}`);
 
-    return [buildTask.unwrap(), watchTask.unwrap()];
+        return [normalTask.unwrap(), watchTask.unwrap()];
+    }
+
+    return [normalTask.unwrap()];
 }
