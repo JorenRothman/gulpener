@@ -8,7 +8,7 @@ export interface GulpenerOptions {
     watchName: string;
     inGlobs: string[];
     watchGlobs: string[];
-    outFolder: string;
+    outFolder?: string;
     isProduction: boolean;
     pipes?: [[CallableFunction, any, any?, any?]];
 }
@@ -20,7 +20,7 @@ export default function gulpener(
         name,
         watchName = '',
         inGlobs,
-        outFolder,
+        outFolder = '',
         watchGlobs,
         pipes = [],
         isProduction = true,
@@ -33,7 +33,9 @@ export default function gulpener(
             taskBuilder.addStream(pipe, isProduction);
         });
 
-        taskBuilder.addStream([dest, outFolder], isProduction);
+        if (outFolder) {
+            taskBuilder.addStream([dest, outFolder], isProduction);
+        }
 
         return taskBuilder.stream;
     });

@@ -4,7 +4,7 @@ export interface GulpenerOptions {
     watchName: string;
     inGlobs: string[];
     watchGlobs: string[];
-    outFolder: string;
+    outFolder?: string;
     isProduction: boolean;
     pipes?: [[CallableFunction, any, any?, any?]];
 }
