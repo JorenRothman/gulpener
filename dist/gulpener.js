@@ -15,10 +15,10 @@ function gulpener(options) {
         taskBuilder.addStream([gulp_1.dest, outFolder], isProduction);
         return taskBuilder.stream;
     });
-    const normalTask = gulp_1.task(`build:${name}`);
+    const normalTask = gulp_1.task(`${name}`);
     if (watchName) {
         gulp_1.task(`${watchName}`, () => gulp_1.watch(watchGlobs, normalTask));
-        const watchTask = gulp_1.task(`watch:${name}`);
+        const watchTask = gulp_1.task(`${name}`);
         return [normalTask.unwrap(), watchTask.unwrap()];
     }
     return [normalTask.unwrap()];

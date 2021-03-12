@@ -38,12 +38,12 @@ export default function gulpener(
         return taskBuilder.stream;
     });
 
-    const normalTask = task(`build:${name}`);
+    const normalTask = task(`${name}`);
 
     if (watchName) {
         task(`${watchName}`, () => watch(watchGlobs, normalTask));
 
-        const watchTask = task(`watch:${name}`);
+        const watchTask = task(`${name}`);
 
         return [normalTask.unwrap(), watchTask.unwrap()];
     }
